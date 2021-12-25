@@ -8,15 +8,11 @@ import (
 
 	_ "github.com/lib/pq"
 
-	db "simple_bank/db/repository"
+	_repo "simple_bank/db/repository"
+	"simple_bank/util"
 )
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:secret@localhost:5433/simple_bank?sslmode=disable"
-)
-
-var testQueries *db.Queries
+var testQueries *_repo.Queries
 var testDB *sql.DB
 
 // func TestMain(m *testing.M) {
@@ -31,13 +27,17 @@ var testDB *sql.DB
 // }
 
 func TestMain(m *testing.M) {
-	var err error
-	testDB, err = sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig("./../..")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	testQueries = db.New(testDB)
+	testQueries = _repo.New(testDB)
 
 	os.Exit(m.Run())
 }
