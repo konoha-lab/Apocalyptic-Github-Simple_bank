@@ -6,7 +6,7 @@ import (
 
 type Server struct {
 	handler Handler
-	router  *gin.Engine
+	Router  *gin.Engine
 }
 
 func NewServer(handler Handler) *Server {
@@ -18,7 +18,7 @@ func NewServer(handler Handler) *Server {
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccount)
 
-	server.router = router
+	server.Router = router
 	return server
 }
 
@@ -27,5 +27,5 @@ func errorResponse(err error) gin.H {
 }
 
 func (server *Server) Start(address string) error {
-	return server.router.Run(address)
+	return server.Router.Run(address)
 }

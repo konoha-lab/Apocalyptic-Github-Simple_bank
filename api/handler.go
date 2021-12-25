@@ -3,6 +3,8 @@ package api
 import (
 	"database/sql"
 	_repo "simple_bank/db/repository"
+
+	_ "github.com/golang/mock/mockgen/model"
 )
 
 type Handler interface {

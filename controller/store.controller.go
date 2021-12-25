@@ -8,8 +8,8 @@ import (
 	_repo "simple_bank/db/repository"
 )
 
-func (store *Controller) execTx(ctx context.Context, fn func(*_repo.Queries) error) error {
-	tx, err := store.db.BeginTx(ctx, nil)
+func (ctrl *Controller) execTx(ctx context.Context, fn func(*_repo.Queries) error) error {
+	tx, err := ctrl.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
@@ -43,10 +43,10 @@ type TransferTxResult struct {
 
 var TxKey = struct{}{}
 
-func (store *Controller) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (ctrl *Controller) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
-	err := store.execTx(ctx, func(q *_repo.Queries) error {
+	err := ctrl.execTx(ctx, func(q *_repo.Queries) error {
 		var err error
 
 		txName := ctx.Value(TxKey)

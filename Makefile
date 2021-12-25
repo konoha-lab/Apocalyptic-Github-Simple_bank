@@ -28,7 +28,10 @@ sqlc:
 server:
 	go run main.go
 
+mock:
+	mockgen -package mockapi -destination db/mock/handler.go simple_bank/api Handler
+
 test:
 	go test -v -cover ./...
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc server test
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc server test mock

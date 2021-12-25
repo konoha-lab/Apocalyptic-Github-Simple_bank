@@ -13,16 +13,21 @@ type Querier interface {
 	GetAccount(ctx context.Context, id int64) (models.Account, error)
 	ListAccounts(ctx context.Context, arg ListAccountsParams) ([]models.Account, error)
 	UpdateAccount(ctx context.Context, arg UpdateAccountParams) (models.Account, error)
+	AddAccountBalance(ctx context.Context, arg AddAccountBalanceParams) (models.Account, error)
+	GetRandomId(ctx context.Context) (int64, error)
+
 	CreateEntry(ctx context.Context, arg CreateEntryParams) (models.Entry, error)
 	DeleteEntry(ctx context.Context, id int64) error
 	GetEntry(ctx context.Context, id int64) (models.Entry, error)
 	ListEntry(ctx context.Context, arg ListEntryParams) ([]models.Entry, error)
 	UpdateEntry(ctx context.Context, arg UpdateEntryParams) (models.Entry, error)
+
 	CreateTransfer(ctx context.Context, arg CreateTransferParams) (models.Transfer, error)
 	DeleteTransfer(ctx context.Context, id int64) error
 	GetTransfer(ctx context.Context, id int64) (models.Transfer, error)
 	ListTransfer(ctx context.Context, arg ListTransferParams) ([]models.Transfer, error)
 	UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (models.Transfer, error)
+
 }
 
 var _ Querier = (*Queries)(nil)
