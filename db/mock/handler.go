@@ -8,6 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+	ctrl "simple_bank/api/controller"
 	models "simple_bank/db/models"
 	repository "simple_bank/db/repository"
 )
@@ -240,6 +241,21 @@ func (m *MockHandler) ListTransfer(arg0 context.Context, arg1 repository.ListTra
 func (mr *MockHandlerMockRecorder) ListTransfer(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTransfer", reflect.TypeOf((*MockHandler)(nil).ListTransfer), arg0, arg1)
+}
+
+// ST_TransferTx mocks base method
+func (m *MockHandler) ST_TransferTx(arg0 context.Context, arg1 ctrl.TransferTxParams) (ctrl.TransferTxResult, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ST_TransferTx", arg0, arg1)
+	ret0, _ := ret[0].(ctrl.TransferTxResult)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ST_TransferTx indicates an expected call of ST_TransferTx
+func (mr *MockHandlerMockRecorder) ST_TransferTx(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ST_TransferTx", reflect.TypeOf((*MockHandler)(nil).ST_TransferTx), arg0, arg1)
 }
 
 // UpdateAccount mocks base method

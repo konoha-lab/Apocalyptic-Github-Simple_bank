@@ -3,14 +3,15 @@ package repository
 import (
 	"context"
 	"fmt"
-	_ctrl "simple_bank/controller"
+	_api "simple_bank/api"
+	_ctrl "simple_bank/api/controller"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestTransferTx(t *testing.T) {
-	store := _ctrl.NewController(testDB)
+	store := _api.New(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -28,7 +29,7 @@ func TestTransferTx(t *testing.T) {
 		go func() {
 			ctx := context.WithValue(context.Background(), _ctrl.TxKey, txName)
 
-			result, err := store.TransferTx(ctx, _ctrl.TransferTxParams{
+			result, err := store.ST_TransferTx(ctx, _ctrl.TransferTxParams{
 				FromAccountID: account1.ID,
 				ToAccountID:   account2.ID,
 				Amount:        amount,
@@ -121,7 +122,7 @@ func TestTransferTx(t *testing.T) {
 }
 
 func TestTransferTxDeadlock(t *testing.T) {
-	store := _ctrl.NewController(testDB)
+	store := _api.New(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -143,7 +144,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
 			ctx := context.WithValue(context.Background(), _ctrl.TxKey, txName)
-			_, err := store.TransferTx(ctx, _ctrl.TransferTxParams{
+			_, err := store.ST_TransferTx(ctx, _ctrl.TransferTxParams{
 				FromAccountID: fromAccountID,
 				ToAccountID:   toAccountID,
 				Amount:        amount,

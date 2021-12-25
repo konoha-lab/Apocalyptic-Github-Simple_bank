@@ -1,4 +1,4 @@
-package controller
+package ctrl
 
 import (
 	"context"
@@ -8,24 +8,7 @@ import (
 	_repo "simple_bank/db/repository"
 )
 
-func (ctrl *Controller) execTx(ctx context.Context, fn func(*_repo.Queries) error) error {
-	tx, err := ctrl.db.BeginTx(ctx, nil)
-	if err != nil {
-		return err
-	}
-
-	q := _repo.New(tx)
-
-	err = fn(q)
-	if err != nil {
-		if rbErr := tx.Rollback(); rbErr != nil {
-			return fmt.Errorf("tx err: %v, rb err: %v", err, rbErr)
-		}
-		return err
-	}
-
-	return tx.Commit()
-}
+/***** Alias ST_ *****/
 
 type TransferTxParams struct {
 	FromAccountID int64   `json:"from_account_id"`
@@ -43,10 +26,10 @@ type TransferTxResult struct {
 
 var TxKey = struct{}{}
 
-func (ctrl *Controller) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (handler *HandlerSQL) ST_TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
-	err := ctrl.execTx(ctx, func(q *_repo.Queries) error {
+	err := handler.execTx(ctx, func(q *_repo.Queries) error {
 		var err error
 
 		txName := ctx.Value(TxKey)

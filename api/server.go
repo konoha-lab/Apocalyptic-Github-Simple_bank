@@ -17,6 +17,7 @@ func NewServer(handler Handler) *Server {
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccount)
+	router.POST("/transfers", server.createTransfer)
 
 	server.Router = router
 	return server
