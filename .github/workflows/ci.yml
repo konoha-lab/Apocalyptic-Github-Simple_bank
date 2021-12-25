@@ -22,7 +22,7 @@ jobs:
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.17
+          go-version: ^1.15
         id: go
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
