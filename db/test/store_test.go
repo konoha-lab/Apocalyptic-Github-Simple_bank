@@ -3,14 +3,14 @@ package repository
 import (
 	"context"
 	"fmt"
-	_repo "simple_bank/db/repository"
+	_ctrl "simple_bank/controller"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestTransferTx(t *testing.T) {
-	store := _repo.NewStore(testDB)
+	store := _ctrl.NewController(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -21,14 +21,14 @@ func TestTransferTx(t *testing.T) {
 
 	// run n concurrent transfer transaction
 	errs := make(chan error)
-	results := make(chan _repo.TransferTxResult)
+	results := make(chan _ctrl.TransferTxResult)
 
 	for i := 0; i < n; i++ {
 		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
-			ctx := context.WithValue(context.Background(), _repo.TxKey, txName)
+			ctx := context.WithValue(context.Background(), _ctrl.TxKey, txName)
 
-			result, err := store.TransferTx(ctx, _repo.TransferTxParams{
+			result, err := store.TransferTx(ctx, _ctrl.TransferTxParams{
 				FromAccountID: account1.ID,
 				ToAccountID:   account2.ID,
 				Amount:        amount,
@@ -121,7 +121,7 @@ func TestTransferTx(t *testing.T) {
 }
 
 func TestTransferTxDeadlock(t *testing.T) {
-	store := _repo.NewStore(testDB)
+	store := _ctrl.NewController(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -142,8 +142,8 @@ func TestTransferTxDeadlock(t *testing.T) {
 
 		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
-			ctx := context.WithValue(context.Background(), _repo.TxKey, txName)
-			_, err := store.TransferTx(ctx, _repo.TransferTxParams{
+			ctx := context.WithValue(context.Background(), _ctrl.TxKey, txName)
+			_, err := store.TransferTx(ctx, _ctrl.TransferTxParams{
 				FromAccountID: fromAccountID,
 				ToAccountID:   toAccountID,
 				Amount:        amount,

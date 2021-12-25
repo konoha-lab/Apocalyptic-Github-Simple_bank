@@ -1,32 +1,20 @@
-package repository
+package controller
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"simple_bank/db/models"
+	_repo "simple_bank/db/repository"
 )
 
-type Store struct {
-	*Queries
-	db *sql.DB
-}
-
-func NewStore(db *sql.DB) *Store {
-	return &Store{
-		db:      db,
-		Queries: New(db),
-	}
-}
-
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *Controller) execTx(ctx context.Context, fn func(*_repo.Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
 
-	q := New(tx)
+	q := _repo.New(tx)
 
 	err = fn(q)
 	if err != nil {
@@ -55,16 +43,16 @@ type TransferTxResult struct {
 
 var TxKey = struct{}{}
 
-func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (store *Controller) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
-	err := store.execTx(ctx, func(q *Queries) error {
+	err := store.execTx(ctx, func(q *_repo.Queries) error {
 		var err error
 
 		txName := ctx.Value(TxKey)
 
 		fmt.Println(txName, "create transfer")
-		result.Transfer, err = q.CreateTransfer(ctx, CreateTransferParams{
+		result.Transfer, err = q.CreateTransfer(ctx, _repo.CreateTransferParams{
 			FromAccountID: arg.FromAccountID,
 			ToAccountID:   arg.ToAccountID,
 			Amount:        arg.Amount,
@@ -74,7 +62,7 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		}
 
 		fmt.Println(txName, "create entry 1")
-		result.FromEntry, err = q.CreateEntry(ctx, CreateEntryParams{
+		result.FromEntry, err = q.CreateEntry(ctx, _repo.CreateEntryParams{
 			AccountID: arg.FromAccountID,
 			Amount:    -arg.Amount,
 		})
@@ -83,7 +71,7 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		}
 
 		fmt.Println(txName, "create entry 2")
-		result.ToEntry, err = q.CreateEntry(ctx, CreateEntryParams{
+		result.ToEntry, err = q.CreateEntry(ctx, _repo.CreateEntryParams{
 			AccountID: arg.ToAccountID,
 			Amount:    arg.Amount,
 		})
@@ -191,13 +179,13 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 
 func addMoney(
 	ctx context.Context,
-	q *Queries,
+	q *_repo.Queries,
 	accountID1 int64,
 	amount1 float64,
 	accountID2 int64,
 	amount2 float64,
 ) (account1 models.Account, account2 models.Account, err error) {
-	account1, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+	account1, err = q.AddAccountBalance(ctx, _repo.AddAccountBalanceParams{
 		ID:     accountID1,
 		Amount: amount1,
 	})
@@ -205,7 +193,7 @@ func addMoney(
 		return
 	}
 
-	account2, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+	account2, err = q.AddAccountBalance(ctx, _repo.AddAccountBalanceParams{
 		ID:     accountID2,
 		Amount: amount2,
 	})
