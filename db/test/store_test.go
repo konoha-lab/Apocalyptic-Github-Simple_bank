@@ -1,15 +1,16 @@
-package db
+package repository
 
 import (
 	"context"
 	"fmt"
+	_repo "simple_bank/db/repository"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestTransferTx(t *testing.T) {
-	store := NewStore(testDB)
+	store := _repo.NewStore(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -20,14 +21,14 @@ func TestTransferTx(t *testing.T) {
 
 	// run n concurrent transfer transaction
 	errs := make(chan error)
-	results := make(chan TransferTxResult)
+	results := make(chan _repo.TransferTxResult)
 
 	for i := 0; i < n; i++ {
 		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
-			ctx := context.WithValue(context.Background(), txKey, txName)
+			ctx := context.WithValue(context.Background(), _repo.TxKey, txName)
 
-			result, err := store.TransferTx(ctx, TransferTxParams{
+			result, err := store.TransferTx(ctx, _repo.TransferTxParams{
 				FromAccountID: account1.ID,
 				ToAccountID:   account2.ID,
 				Amount:        amount,
@@ -95,7 +96,7 @@ func TestTransferTx(t *testing.T) {
 
 		diff1 := account1.Balance - fromAccount.Balance
 		diff2 := toAccount.Balance - account2.Balance
-		fmt.Println(diff1, diff2)
+
 		require.Equal(t, diff1, diff2)
 		require.True(t, diff1 > 0)
 		require.True(t, int64(diff1)%int64(amount) == 0) // 1 * amount, 2 * amount, 3 * amount, ..., n * amount
@@ -120,7 +121,7 @@ func TestTransferTx(t *testing.T) {
 }
 
 func TestTransferTxDeadlock(t *testing.T) {
-	store := NewStore(testDB)
+	store := _repo.NewStore(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -141,8 +142,8 @@ func TestTransferTxDeadlock(t *testing.T) {
 
 		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
-			ctx := context.WithValue(context.Background(), txKey, txName)
-			_, err := store.TransferTx(ctx, TransferTxParams{
+			ctx := context.WithValue(context.Background(), _repo.TxKey, txName)
+			_, err := store.TransferTx(ctx, _repo.TransferTxParams{
 				FromAccountID: fromAccountID,
 				ToAccountID:   toAccountID,
 				Amount:        amount,

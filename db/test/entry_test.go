@@ -1,9 +1,10 @@
-package db
+package repository
 
 import (
 	"context"
 	"database/sql"
 	"simple_bank/db/models"
+	_repo "simple_bank/db/repository"
 	"simple_bank/util"
 	"testing"
 	"time"
@@ -15,7 +16,7 @@ import (
 func createRandomEntry(t *testing.T) models.Entry {
 	accountId := getRandomAccountID(t)
 
-	arg := CreateEntryParams{
+	arg := _repo.CreateEntryParams{
 		AccountID: accountId,
 		Amount:    util.RandomMoney(),
 	}
@@ -53,7 +54,7 @@ func TestGetEntry(t *testing.T) {
 func TestUpdateEntry(t *testing.T) {
 	entry1 := createRandomEntry(t)
 
-	arg := UpdateEntryParams{
+	arg := _repo.UpdateEntryParams{
 		ID:     entry1.ID,
 		Amount: util.RandomMoney(),
 	}
@@ -83,7 +84,7 @@ func TestListEntry(t *testing.T) {
 		createRandomEntry(t)
 	}
 
-	arg := ListEntryParams{
+	arg := _repo.ListEntryParams{
 		Limit:  5,
 		Offset: 5,
 	}

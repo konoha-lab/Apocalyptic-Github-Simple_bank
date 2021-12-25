@@ -1,9 +1,10 @@
-package db
+package repository
 
 import (
 	"context"
 	"database/sql"
 	"simple_bank/db/models"
+	_repo "simple_bank/db/repository"
 	"simple_bank/util"
 	"testing"
 	"time"
@@ -16,7 +17,7 @@ func createRandomTransfer(t *testing.T) models.Transfer {
 	accountId1 := getRandomAccountID(t)
 	accountId2 := getRandomAccountID(t)
 
-	arg := CreateTransferParams{
+	arg := _repo.CreateTransferParams{
 		FromAccountID: accountId1,
 		ToAccountID:   accountId2,
 		Amount:        util.RandomMoney(),
@@ -57,7 +58,7 @@ func TestGetTransfer(t *testing.T) {
 func TestUpdateTransfer(t *testing.T) {
 	transfer1 := createRandomTransfer(t)
 
-	arg := UpdateTransferParams{
+	arg := _repo.UpdateTransferParams{
 		ID:            transfer1.ID,
 		FromAccountID: transfer1.FromAccountID,
 		ToAccountID:   transfer1.ToAccountID,
@@ -90,7 +91,7 @@ func TestListTransfer(t *testing.T) {
 		createRandomTransfer(t)
 	}
 
-	arg := ListTransferParams{
+	arg := _repo.ListTransferParams{
 		Limit:  5,
 		Offset: 5,
 	}

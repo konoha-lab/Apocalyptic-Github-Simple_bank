@@ -1,14 +1,14 @@
-package db
+package repository
 
 import (
-	"context"
 	"database/sql"
 	"log"
 	"os"
 	"testing"
 
 	_ "github.com/lib/pq"
-	"github.com/stretchr/testify/require"
+
+	db "simple_bank/db/repository"
 )
 
 const (
@@ -16,7 +16,7 @@ const (
 	dbSource = "postgresql://root:secret@localhost:5433/simple_bank?sslmode=disable"
 )
 
-var testQueries *Queries
+var testQueries *db.Queries
 var testDB *sql.DB
 
 // func TestMain(m *testing.M) {
@@ -37,15 +37,7 @@ func TestMain(m *testing.M) {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	testQueries = New(testDB)
+	testQueries = db.New(testDB)
 
 	os.Exit(m.Run())
-}
-
-func getRandomAccountID(t *testing.T) int64 {
-	accountId1, err := testQueries.GetRandomId(context.Background())
-	require.NoError(t, err)
-	require.NotEmpty(t, accountId1)
-
-	return accountId1
 }

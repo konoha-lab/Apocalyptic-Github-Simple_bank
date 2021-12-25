@@ -1,9 +1,10 @@
-package db
+package repository
 
 import (
 	"context"
 	"database/sql"
 	"simple_bank/db/models"
+	_repo "simple_bank/db/repository"
 	"simple_bank/util"
 	"testing"
 	"time"
@@ -11,8 +12,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func getRandomAccountID(t *testing.T) int64 {
+	accountId1, err := testQueries.GetRandomId(context.Background())
+	require.NoError(t, err)
+	require.NotEmpty(t, accountId1)
+
+	return accountId1
+}
+
 func TestCreateAccount(t *testing.T) {
-	arg := CreateAccountParams{
+	arg := _repo.CreateAccountParams{
 		Owner:    "tom",
 		Balance:  100,
 		Currency: "USD",
@@ -30,7 +39,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func createRandomAccount(t *testing.T) models.Account {
-	arg := CreateAccountParams{
+	arg := _repo.CreateAccountParams{
 		Owner:    util.RandomOwner(),
 		Balance:  util.RandomMoney(),
 		Currency: "USD",
@@ -71,7 +80,7 @@ func TestGetAccount(t *testing.T) {
 func TestUpdateAccount(t *testing.T) {
 	account1 := createRandomAccount(t)
 
-	arg := UpdateAccountParams{
+	arg := _repo.UpdateAccountParams{
 		ID:       account1.ID,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
@@ -103,7 +112,7 @@ func TestListAccounts(t *testing.T) {
 		createRandomAccount(t)
 	}
 
-	arg := ListAccountsParams{
+	arg := _repo.ListAccountsParams{
 		Limit:  5,
 		Offset: 5,
 	}
