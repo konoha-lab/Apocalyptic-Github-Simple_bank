@@ -5,11 +5,11 @@ import (
 )
 
 type Server struct {
-	handler *Handler
+	handler Handler
 	router  *gin.Engine
 }
 
-func NewServer(handler *Handler) *Server {
+func NewServer(handler Handler) *Server {
 	server := &Server{handler: handler}
 	router := gin.Default()
 

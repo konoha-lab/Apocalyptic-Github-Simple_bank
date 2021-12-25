@@ -5,13 +5,17 @@ import (
 	_repo "simple_bank/db/repository"
 )
 
-type Handler struct {
+type Handler interface {
+	_repo.Querier
+}
+
+type HandlerSQL struct {
 	*_repo.Queries
 	db *sql.DB
 }
 
-func New(db *sql.DB) *Handler {
-	return &Handler{
+func New(db *sql.DB) Handler {
+	return &HandlerSQL{
 		db:      db,
 		Queries: _repo.New(db),
 	}

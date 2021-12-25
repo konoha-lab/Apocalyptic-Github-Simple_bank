@@ -2,9 +2,9 @@
 SELECT * FROM accounts 
 WHERE id = ? LIMIT 1;
 
--- name: ListAccount :many
+-- name: ListAccounts :many
 SELECT * FROM accounts 
-ORDER BY owner;
+ORDER BY owner LIMIT ? OFFSET ?;
 
 -- name: CreateAccount :execresult
 INSERT INTO accounts  (

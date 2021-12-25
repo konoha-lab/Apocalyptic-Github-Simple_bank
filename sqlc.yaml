@@ -2,12 +2,13 @@ version: "1"
 packages: 
   - name: "repository"
     path: "./db/sqlc"
-    queries: "./db/query/transfer.sql"
+    queries: "./db/query/mysql/transfer.sql"
     schema: "./schema/"
-    engine: "postgres"
+    engine: "mysql"
     emit_json_tags: true
     emit_prepared_queries: false
-    emit_interface: false
+    # The setting is called emit_empty_slices, and its default value is false. it option to emit an interface that contains all of the function of the Queries struct.
+    emit_interface: true
     emit_exact_table_names: false
     # The setting is called emit_empty_slices, and its default value is false. If we set this value to true, then the result returned by a many query will be an empty slice.
     emit_empty_slices: true
