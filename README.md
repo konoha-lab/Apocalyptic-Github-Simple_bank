@@ -88,9 +88,25 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
 ### Hot to generate CRUD
 - Add table name inside schema folder (using postgres format or myssql format), see example inside diagram export
 - Create CRUD script inside ```db/query/mysql``` or ```db/query/postgres```, see example inside folder
-- Change file ```sqlc.yaml``` part ```queries``` & ```engine``` name
+- Change file ```sqlc.yaml``` part ```queries``` & ```engine``` name, according to the file added in the folder ```db/query/mysql``` or ```db/query/postgres``` & what engine you are using (postgres/mysql)
+  ```
+  version: "1"
+    packages: 
+      - name: "repository"
+    	path: "./db/sqlc"
+    	𝑞𝑢𝑒𝑟𝑖𝑒𝑠: "./𝑑𝑏/𝑞𝑢𝑒𝑟𝑦/𝑚𝑦𝑠𝑞𝑙/𝑡𝑟𝑎𝑛𝑠𝑓𝑒𝑟.𝑠𝑞𝑙"
+    	schema: "./schema/"
+    	𝑒𝑛𝑔𝑖𝑛𝑒: "𝑚𝑦𝑠𝑞𝑙"
+    	emit_json_tags: true
+    	emit_prepared_queries: false
+    	# The setting is called emit_empty_slices, and its default value is false. it option to emit an interface that contains all of the function of the Queries struct.
+    	emit_interface: true
+    	emit_exact_table_names: false
+    	# The setting is called emit_empty_slices, and its default value is false. If we set this value to true, then the result returned by a many query will be an empty slice.
+    	emit_empty_slices: true
+  ```
 - Run ```sqlc generate``` inside command prompt, this will generate file inside ```db\sqlc```
-- Copy file ```db\sqlc\models.go``` to ```db\models``` and rename it as type of struct
+- Copy file ```db\sqlc\models.go``` to ```db\models``` and rename it as type of struct [table-name]
 - Copy what inside ```db\sqlc\querier.go```
    ```
     type Querier interface {
@@ -104,12 +120,13 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
     }
    ```
    paste it inside ```db\repository\querier.go```.
-   if using template mysql, change  ```sql.Result``` as return function ```Create[Transfer]``` & ```Update[Transfer]``` to ```[Transfer]``` type (type [table-name] struct)
-- Copy file ```db\sqlc\[table-name].go``` into ```db\repository\``` and rename it ```[table-name].go.go``` to ```[table-name].repository.go```
+   if using template mysql, change  ```sql.Result``` as return type (type [table-name] struct) for function ```Create[Transfer]``` & ```Update[Transfer]```
+- Copy file ```db\sqlc\[table-name].db.go``` into ```db\repository\``` and rename it from ```[table-name].db.go``` to ```[table-name].repository.go```
   if using template mysql, change  ```sql.Result``` as well.
 - Run ```mockgen -package mockapi -destination db/mock/handler.go simple_bank/api Handler``` inside command prompt, to generate morkgen.
 - Delete what left inside ```db\sqlc```
 - Dont forget to create test file inside ```db\test```
+- happy coding :grin:
 
 ### Notes
 1.  Requires a version of Go that supports modules. e.g. Go 1.15+
