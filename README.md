@@ -14,43 +14,35 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
     https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2&viewFallbackFrom=powershell-6
     ```
 
-2. [scoop](https://scoop.sh/)
-**Installation (in powershell admin)**
-     
-    ```
-    Set-ExecutionPolicy RemoteSigned -scope CurrentUser
-    Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-    ```
-
-3. [Golang](https://go.dev/dl/)
+2. [Golang](https://go.dev/dl/)
 **Installation :**
 
     ```
     https://go.dev/dl/
     ```
 
-4. [Docker desktop](https://www.docker.com/products/docker-desktop)
+3. [Docker desktop](https://www.docker.com/products/docker-desktop)
 **Installation :**
 
     ```
     https://www.docker.com/products/docker-desktop
     ```
 
-5. [TablePlus](https://tableplus.com/)
+4. [TablePlus](https://tableplus.com/)
 **Installation :**
 
     ```
     https://tableplus.com/
     ```
 
-4. [Git](https://git-scm.com/downloads)
+5. [Git](https://git-scm.com/downloads)
 **Installation :**
 
     ```
     https://git-scm.com/downloads
     ```
 
-5. [sqlc](https://sqlc.dev/)
+6. [sqlc](https://sqlc.dev/)
 **Installation :**
 
     ```
@@ -58,7 +50,7 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
     ```
 
 
-6. [Make](http://gnuwin32.sourceforge.net/packages/make.htm)
+7. [Make](http://gnuwin32.sourceforge.net/packages/make.htm)
 **Installation :**
     > [choco](https://chocolatey.org/install) required :
         Install choco in windows (in powershell admin) :
@@ -74,6 +66,13 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
 
 7. [migrate](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate#installation)
 **Installation :**
+    > [scoop](https://scoop.sh/) required :
+        Install scoop in windows (in powershell admin) :
+     
+    ```
+    Set-ExecutionPolicy RemoteSigned -scope CurrentUser
+    Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+    ```
 
     ```
     scoop install migrate
@@ -86,8 +85,33 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
 - ```$ make migrateup```
 - ```$ make server```
 
+### Hot to generate CRUD
+- Add table name inside schema folder (using postgres format or myssql format), see example inside diagram export
+- Create CRUD script inside ```db/query/mysql``` or ```db/query/postgres```, see example inside folder
+- Change file ```sqlc.yaml``` part ```queries``` & ```engine``` name
+- Run ```sqlc generate``` inside command prompt, this will generate file inside ```db\sqlc```
+- Copy file ```db\sqlc\models.go``` to ```db\models``` and rename it as type of struct
+- Copy what inside ```db\sqlc\querier.go```
+   ```
+    type Querier interface {
+        ...
+	    CreateTransfer(ctx context.Context, arg CreateTransferParams) (sql.Result, error)
+	    DeleteTransfer(ctx context.Context, id int64) error
+	    GetTransfer(ctx context.Context, id int64) (Transfer, error)
+	    ListTransfer(ctx context.Context, arg ListTransferParams) ([]Transfer, error)
+	    UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (sql.Result, error)
+        ...
+    }
+   ```
+   paste it inside ```db\repository\querier.go```.
+   if using template mysql, change  ```sql.Result``` as return function ```Create[Transfer]``` & ```Update[Transfer]``` to ```[Transfer]``` type (type [table-name] struct)
+- Copy file ```db\sqlc\[table-name].go``` into ```db\repository\``` and rename it ```[table-name].go.go``` to ```[table-name].repository.go```
+  if using template mysql, change  ```sql.Result``` as well.
+- Run ```mockgen -package mockapi -destination db/mock/handler.go simple_bank/api Handler``` inside command prompt, to generate morkgen.
+- Delete what left inside ```db\sqlc```
+- Dont forget to create test file inside ```db\test```
+
 ### Notes
-#notes
 1.  Requires a version of Go that supports modules. e.g. Go 1.15+
 2.  These examples build the with postgres/mysql Database. 
 
