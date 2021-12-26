@@ -29,7 +29,7 @@ func TestTransferTx(t *testing.T) {
 		go func() {
 			ctx := context.WithValue(context.Background(), _ctrl.TxKey, txName)
 
-			result, err := store.ST_TransferTx(ctx, _ctrl.TransferTxParams{
+			result, err := store.ST_C_TransferTx(ctx, _ctrl.TransferTxParams{
 				FromAccountID: account1.ID,
 				ToAccountID:   account2.ID,
 				Amount:        amount,
@@ -144,7 +144,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
 			ctx := context.WithValue(context.Background(), _ctrl.TxKey, txName)
-			_, err := store.ST_TransferTx(ctx, _ctrl.TransferTxParams{
+			_, err := store.ST_C_TransferTx(ctx, _ctrl.TransferTxParams{
 				FromAccountID: fromAccountID,
 				ToAccountID:   toAccountID,
 				Amount:        amount,

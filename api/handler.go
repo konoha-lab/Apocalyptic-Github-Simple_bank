@@ -11,7 +11,7 @@ import (
 
 type Handler interface {
 	_repo.Querier
-	ST_TransferTx(ctx context.Context, arg _ctrl.TransferTxParams) (_ctrl.TransferTxResult, error)
+	ST_C_TransferTx(ctx context.Context, arg _ctrl.TransferTxParams) (_ctrl.TransferTxResult, error)
 }
 
 func New(db *sql.DB) Handler {

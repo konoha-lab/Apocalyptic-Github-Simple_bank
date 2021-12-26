@@ -28,7 +28,7 @@ func (server *Server) createTransfer(ctx *gin.Context) {
 		Amount:        req.Amount,
 	}
 
-	result, err := server.handler.ST_TransferTx(ctx, arg)
+	result, err := server.handler.ST_C_TransferTx(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return

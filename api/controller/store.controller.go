@@ -8,7 +8,7 @@ import (
 	_repo "simple_bank/db/repository"
 )
 
-/***** Alias ST_ *****/
+/***** Alias ST_C_ *****/
 
 type TransferTxParams struct {
 	FromAccountID int64   `json:"from_account_id"`
@@ -26,7 +26,7 @@ type TransferTxResult struct {
 
 var TxKey = struct{}{}
 
-func (handler *HandlerSQL) ST_TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (handler *HandlerSQL) ST_C_TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
 	err := handler.execTx(ctx, func(q *_repo.Queries) error {
