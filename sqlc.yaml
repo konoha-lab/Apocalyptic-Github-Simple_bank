@@ -2,7 +2,7 @@ version: "1"
 packages: 
   - name: "repository"
     path: "./db/sqlc"
-    queries: "./db/query/mysql/transfer.sql"
+    queries: "./db/query/mysql/user.sql"
     schema: "./schema/"
     engine: "mysql"
     emit_json_tags: true

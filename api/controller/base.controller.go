@@ -1,4 +1,4 @@
-package ctrl
+package controller_api
 
 import (
 	"context"

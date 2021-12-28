@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	api "simple_bank/api"
 	mockapi "simple_bank/db/mock"
 	"simple_bank/db/models"
 	"simple_bank/util"
@@ -30,7 +29,7 @@ func TestGetAccountAPI(t *testing.T) {
 		Times(1).
 		Return(account, nil)
 
-	server := api.NewServer(handle)
+	server := newTestServer(t, handle)
 	recorder := httptest.NewRecorder()
 
 	url := fmt.Sprintf("/accounts/%d", account.ID)
@@ -113,10 +112,10 @@ func TestGetAccountAPI2(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
-			store := mockapi.NewMockHandler(ctrl)
-			tc.buildStubs(store)
+			handler := mockapi.NewMockHandler(ctrl)
+			tc.buildStubs(handler)
 
-			server := api.NewServer(store)
+			server := newTestServer(t, handler)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts/%d", tc.accountID)

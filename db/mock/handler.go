@@ -8,7 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
-	ctrl "simple_bank/api/controller"
+	controller_api "simple_bank/api/controller"
 	models "simple_bank/db/models"
 	repository "simple_bank/db/repository"
 )
@@ -94,6 +94,21 @@ func (m *MockHandler) CreateTransfer(arg0 context.Context, arg1 repository.Creat
 func (mr *MockHandlerMockRecorder) CreateTransfer(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransfer", reflect.TypeOf((*MockHandler)(nil).CreateTransfer), arg0, arg1)
+}
+
+// CreateUser mocks base method
+func (m *MockHandler) CreateUser(arg0 context.Context, arg1 repository.CreateUserParams) (models.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUser", arg0, arg1)
+	ret0, _ := ret[0].(models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUser indicates an expected call of CreateUser
+func (mr *MockHandlerMockRecorder) CreateUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockHandler)(nil).CreateUser), arg0, arg1)
 }
 
 // DeleteAccount mocks base method
@@ -198,6 +213,21 @@ func (mr *MockHandlerMockRecorder) GetTransfer(arg0, arg1 interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTransfer", reflect.TypeOf((*MockHandler)(nil).GetTransfer), arg0, arg1)
 }
 
+// GetUser mocks base method
+func (m *MockHandler) GetUser(arg0 context.Context, arg1 string) (models.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUser", arg0, arg1)
+	ret0, _ := ret[0].(models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUser indicates an expected call of GetUser
+func (mr *MockHandlerMockRecorder) GetUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockHandler)(nil).GetUser), arg0, arg1)
+}
+
 // ListAccounts mocks base method
 func (m *MockHandler) ListAccounts(arg0 context.Context, arg1 repository.ListAccountsParams) ([]models.Account, error) {
 	m.ctrl.T.Helper()
@@ -244,10 +274,10 @@ func (mr *MockHandlerMockRecorder) ListTransfer(arg0, arg1 interface{}) *gomock.
 }
 
 // ST_C_TransferTx mocks base method
-func (m *MockHandler) ST_C_TransferTx(arg0 context.Context, arg1 ctrl.TransferTxParams) (ctrl.TransferTxResult, error) {
+func (m *MockHandler) ST_C_TransferTx(arg0 context.Context, arg1 controller_api.TransferTxParams) (controller_api.TransferTxResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ST_C_TransferTx", arg0, arg1)
-	ret0, _ := ret[0].(ctrl.TransferTxResult)
+	ret0, _ := ret[0].(controller_api.TransferTxResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

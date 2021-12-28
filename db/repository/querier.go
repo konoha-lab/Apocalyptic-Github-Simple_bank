@@ -28,6 +28,8 @@ type Querier interface {
 	ListTransfer(ctx context.Context, arg ListTransferParams) ([]models.Transfer, error)
 	UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (models.Transfer, error)
 
+	CreateUser(ctx context.Context, arg CreateUserParams) (models.User, error)
+	GetUser(ctx context.Context, username string) (models.User, error)
 }
 
 var _ Querier = (*Queries)(nil)

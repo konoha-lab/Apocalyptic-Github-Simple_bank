@@ -21,8 +21,10 @@ func getRandomAccountID(t *testing.T) int64 {
 }
 
 func TestCreateAccount(t *testing.T) {
+	user := createRandomUser(t)
 	arg := _repo.CreateAccountParams{
-		Owner:    "tom",
+		// Owner:    "tom",
+		Owner:    user.Username,
 		Balance:  100,
 		Currency: "USD",
 	}
@@ -39,8 +41,9 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func createRandomAccount(t *testing.T) models.Account {
+	user := createRandomUser(t)
 	arg := _repo.CreateAccountParams{
-		Owner:    util.RandomOwner(),
+		Owner:    user.Username,
 		Balance:  util.RandomMoney(),
 		Currency: "USD",
 	}

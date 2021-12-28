@@ -21,7 +21,10 @@ func main() {
 	}
 
 	handler := api.New(conn)
-	server := api.NewServer(handler)
+	server, err := api.NewServer(config, handler)
+	if err != nil {
+		log.Fatal("cannot create  server:", err)
+	}
 
 	err = server.Start(config.ServerAddress)
 	if err != nil {
