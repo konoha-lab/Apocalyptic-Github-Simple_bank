@@ -80,8 +80,9 @@ Download pre-requirement tools (Windows, MacOS, or Linux)
 
 ### How to use
 - ```$ clone https://github.com/konoha-lab/Apocalyptic-Github-Simple_bank.git```
-- ```$ docker pull postgres:12-alpine (if need to use mysql : docker pull mysql:8.0/docker pull mysql:latest)```
-- ```$ make postgrescreate / make mysqlcreate```
+- ```$ docker pull postgres:12-alpine```
+- ```$ make postgrescreate```
+- ```$ make createdb```
 - ```$ make migrateup```
 - ```$ make server```
 
